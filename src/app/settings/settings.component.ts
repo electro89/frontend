@@ -27,8 +27,25 @@ export class SettingsComponent implements OnInit {
     private titleService: Title,
     private themeService: ThemeService
   ) {}
-
   selectedTheme: string = "";
+
+  filterNewAccountStatus:string=localStorage.getItem("filterNewAccountStatus"); 
+  filterLowCoinStatus:string=localStorage.getItem("filterLowCoinStatus");
+
+  hideLowCoinHolders(){
+    if(this.filterLowCoinStatus===null){
+      this.filterLowCoinStatus="off";
+    }
+    this.filterLowCoinStatus = (this.filterLowCoinStatus=="off") ? "on":"off";
+    localStorage.setItem("filterLowCoinStatus",this.filterLowCoinStatus);
+  }
+  hideNewAccounts(){
+    if(this.filterNewAccountStatus===null){
+      this.filterNewAccountStatus="off";
+    }
+    this.filterNewAccountStatus = (this.filterNewAccountStatus=="off") ? "on":"off";
+    localStorage.setItem("filterNewAccountStatus",this.filterNewAccountStatus);
+  }
 
   selectChangeHandler(event: any) {
     //update the ui
@@ -42,6 +59,7 @@ export class SettingsComponent implements OnInit {
   ngOnInit() {
     this._getUserMetadata();
     this.titleService.setTitle("Settings - BitClout");
+    
   }
 
   _getUserMetadata() {

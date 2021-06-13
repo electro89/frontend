@@ -59,6 +59,48 @@
         <option value="light">Light Theme</option>
         <option value="icydark">Icy Dark Theme</option>
       </select>
+
+      <div class="fs-15px pt-30px">Hide Low Coin Holders (less than $1)</div>
+
+      <div class="w-100 my-10px d-flex align-items-center">
+        <button
+          *ngIf="filterLowCoinStatus=='on'"
+          (click)="hideLowCoinHolders()"
+          class="btn btn-primary btn-lg font-weight-bold fs-15px mt-5px"
+        >
+          Filter ON
+        </button>
+        <button
+          *ngIf="filterLowCoinStatus=='off'"
+          (click)="hideLowCoinHolders()"
+          class="btn btn-primary btn-lg font-weight-bold fs-15px mt-5px"
+        >
+          Filter OFF
+        </button>
+      </div>
+
+
+      <div class="fs-15px pt-30px">Hide new accounts (less than 3 days)</div>
+
+      <div class="w-100 my-10px d-flex align-items-center">
+        <button
+          *ngIf="filterNewAccountStatus=='on'"
+          (click)="hideNewAccounts()"
+          class="btn btn-primary btn-lg font-weight-bold fs-15px mt-5px"
+        >
+          Filter ON 
+        </button>
+        <button
+          *ngIf="filterNewAccountStatus=='off'"
+          (click)="hideNewAccounts()"
+          class="btn btn-primary btn-lg font-weight-bold fs-15px mt-5px"
+        >
+          Filter OFF
+        </button>
+      </div>
+
+      
+
       <!-- SPACER FOR BOTTOM BAR ON MOBILE -->
       <div class="global__bottom-bar-mobile-height"></div>
       <div class="global__bottom-bar-mobile-height"></div>
