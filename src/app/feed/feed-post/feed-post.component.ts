@@ -421,4 +421,16 @@ export class FeedPostComponent implements OnInit {
     }
     return imgURL;
   }
+  isCoinValueLow(){
+    if(localStorage.getItem("filterLowCoinStatus")=='off'){
+      return false;
+    }else{
+      if(this.globalVars.nanosToUSDNumber(this.postContent.ProfileEntryResponse.CoinPriceBitCloutNanos)<1){
+        return true;
+      }else{
+        return false;
+      }
+    }
+    
+  }
 }
