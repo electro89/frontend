@@ -18,15 +18,14 @@ export class SettingsComponent implements OnInit {
   updatingSettings = false;
   showSuccessMessage = false;
   successMessageTimeout: any;
-  whichTheme =
-    localStorage.getItem("theme") || (window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");
 
   constructor(
     public globalVars: GlobalVarsService,
     private backendApi: BackendApiService,
     private titleService: Title,
-    private themeService: ThemeService
+    public themeService: ThemeService
   ) {}
+<<<<<<< HEAD
   selectedTheme: string = "";
 
   filterNewAccountStatus:string=localStorage.getItem("filterNewAccountStatus"); 
@@ -46,14 +45,15 @@ export class SettingsComponent implements OnInit {
     this.filterNewAccountStatus = (this.filterNewAccountStatus=="off") ? "on":"off";
     localStorage.setItem("filterNewAccountStatus",this.filterNewAccountStatus);
   }
+=======
+>>>>>>> main
 
   selectChangeHandler(event: any) {
     //update the ui
-    this.selectedTheme = event.target.value;
+    const selectedTheme = event.target.value;
 
-    this.themeService.setTheme(this.selectedTheme);
-    this.whichTheme = this.selectedTheme;
-    localStorage.setItem("theme", this.selectedTheme);
+    this.themeService.setTheme(selectedTheme);
+    localStorage.setItem("theme", selectedTheme);
   }
 
   ngOnInit() {

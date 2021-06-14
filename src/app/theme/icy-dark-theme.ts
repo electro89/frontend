@@ -1,7 +1,8 @@
 import { Theme } from "./symbols";
 
 export const icydarkTheme: Theme = {
-  name: "icydark",
+  key: "icydark",
+  name: "Icy Dark Theme",
   properties: {
     "--background": "#15202b",
     "--text": "#EFF3F8",
@@ -21,5 +22,6 @@ export const icydarkTheme: Theme = {
     "--cblue": "#238eff",
     "--cred": "#e0245e",
     "--cgreen": "#17BF63",
+    "--loading": "#999",
   },
 };
