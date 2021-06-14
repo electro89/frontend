@@ -25,7 +25,6 @@ export class SettingsComponent implements OnInit {
     private titleService: Title,
     public themeService: ThemeService
   ) {}
-<<<<<<< HEAD
   selectedTheme: string = "";
 
   filterNewAccountStatus:string=localStorage.getItem("filterNewAccountStatus"); 
@@ -45,8 +44,6 @@ export class SettingsComponent implements OnInit {
     this.filterNewAccountStatus = (this.filterNewAccountStatus=="off") ? "on":"off";
     localStorage.setItem("filterNewAccountStatus",this.filterNewAccountStatus);
   }
-=======
->>>>>>> main
 
   selectChangeHandler(event: any) {
     //update the ui
