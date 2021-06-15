@@ -424,12 +424,14 @@ export class FeedPostComponent implements OnInit {
   isCoinValueLow(){
     if(localStorage.getItem("filterLowCoinStatus")=='off'){
       return false;
-    }else{
+    }else if(localStorage.getItem("filterLowCoinStatus")=='on'){
       if(this.globalVars.nanosToUSDNumber(this.postContent.ProfileEntryResponse.CoinPriceBitCloutNanos)<1){
         return true;
       }else{
         return false;
       }
+    }else{
+      return false;
     }
     
   }
