@@ -56,7 +56,22 @@ export class SettingsComponent implements OnInit {
   ngOnInit() {
     this._getUserMetadata();
     this.titleService.setTitle("Settings - BitClout");
-    
+
+    this.filterNewAccountStatus=localStorage.getItem("filterNewAccountStatus"); 
+    this.filterLowCoinStatus=localStorage.getItem("filterLowCoinStatus");
+    let refresh_needed=false;
+    if(this.filterNewAccountStatus===null){
+      localStorage.setItem("filterNewAccountStatus","off"); 
+      refresh_needed=true;
+    }
+
+    if(this.filterLowCoinStatus===null){
+      localStorage.setItem("filterLowCoinStatus","off");
+      refresh_needed=true;
+    }
+    if(refresh_needed){
+      window.location.reload()
+    }
   }
 
   _getUserMetadata() {
