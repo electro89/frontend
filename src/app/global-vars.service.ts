@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { BalanceEntryResponse, PostEntryResponse, User } from "./backend-api.service";
-import { Router, ActivatedRoute, Params } from "@angular/router";
+import { Router, ActivatedRoute } from "@angular/router";
 import { BackendApiService } from "./backend-api.service";
 import { RouteNames } from "./app-routing.module";
 import ConfettiGenerator from "confetti-js";
@@ -10,13 +10,28 @@ import { FollowChangeObservableResult } from "../lib/observable-results/follow-c
 import { SwalHelper } from "../lib/helpers/swal-helper";
 import { environment } from "../environments/environment";
 import { AmplitudeClient } from "amplitude-js";
-import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
+import { DomSanitizer } from "@angular/platform-browser";
 import { IdentityService } from "./identity.service";
-import { configFromArray } from "ngx-bootstrap/chronos/create/from-array";
 import { BithuntService, CommunityProject } from "../lib/services/bithunt/bithunt-service";
 import { LeaderboardResponse, PulseService } from "../lib/services/pulse/pulse-service";
 import { RightBarCreatorsLeaderboardComponent } from "./right-bar-creators/right-bar-creators-leaderboard/right-bar-creators-leaderboard.component";
 import { HttpClient } from "@angular/common/http";
+
+export enum ConfettiSvg {
+  DIAMOND = "diamond",
+  BOMB = "bomb",
+  ROCKET = "rocket",
+  COMET = "comet",
+  LAMBO = "lambo",
+}
+
+const svgToProps = {
+  [ConfettiSvg.DIAMOND]: { size: 10, weight: 1 },
+  [ConfettiSvg.ROCKET]: { size: 18, weight: 1 },
+  [ConfettiSvg.BOMB]: { size: 18, weight: 1 },
+  [ConfettiSvg.COMET]: { size: 18, weight: 1 },
+  [ConfettiSvg.LAMBO]: { size: 18, weight: 1 },
+};
 
 @Injectable({
   providedIn: "root",
@@ -33,12 +48,7 @@ export class GlobalVarsService {
     private identityService: IdentityService,
     private router: Router,
     private httpClient: HttpClient
-  ) {
-    this.pastDeflationBomb = Date.now() >= this.deflationBombTimerEnd;
-    setInterval(() => {
-      this.pastDeflationBomb = Date.now() >= this.deflationBombTimerEnd;
-    }, 1000);
-  }
+  ) {}
 
   static MAX_POST_LENGTH = 280;
 
@@ -165,16 +175,10 @@ export class GlobalVarsService {
 
   amplitude: AmplitudeClient;
 
-  deflationBombTimerEnd = new Date("June 12, 2021 9:00:00 PDT").getTime();
-  announcementTimerEnd = new Date("June 15, 2021 3:00:00 PDT").getTime();
-
-  // This controls the default text of the countdown timer component.
-  deflationBombTimerText = "Deflation Bomb:";
-  announcementTimerText = "Big Announcement:";
-
   profileUpdateTimestamp: number;
 
-  pastDeflationBomb: boolean;
+  // This is currently set to true until we have a price to display in the web app.
+  pastDeflationBomb: boolean = true;
 
   SetupMessages() {
     // If there's no loggedInUser, we set the notification count to zero
@@ -557,6 +561,7 @@ export class GlobalVarsService {
       title = altTitle;
     }
     SwalHelper.fire({
+      target: this.getTargetComponentSelector(),
       icon: "success",
       title,
       html: val,
@@ -575,6 +580,7 @@ export class GlobalVarsService {
 
   _alertError(err: any, showBuyBitClout: boolean = false) {
     SwalHelper.fire({
+      target: this.getTargetComponentSelector(),
       icon: "error",
       title: `Oops...`,
       html: err,
@@ -594,7 +600,7 @@ export class GlobalVarsService {
     });
   }
 
-  celebrate(dropDiamonds: boolean = false, dropBomb: boolean = false) {
+  celebrate(svgList: ConfettiSvg[] = []) {
     const canvasID = "my-canvas-" + this.canvasCount;
     this.canvasCount++;
     this.canvasCount = this.canvasCount % 5;
@@ -607,14 +613,16 @@ export class GlobalVarsService {
       rotate: true,
       clock: 100,
     };
-    if (dropDiamonds) {
-      confettiSettings["props"] = [{ type: "svg", src: "/assets/img/diamond.svg", size: 10 }];
+    if (svgList.length > 0) {
+      confettiSettings["props"] = svgList.map((svg) => {
+        return { ...{ type: "svg", src: `/assets/img/${svg}.svg` }, ...svgToProps[svg] };
+      });
+      if (svgList.indexOf(ConfettiSvg.DIAMOND) >= 0) {
+        confettiSettings.clock = 150;
+      } else {
+        confettiSettings.clock = 75;
+      }
       confettiSettings.max = 200;
-      confettiSettings.clock = 150;
-    } else if (dropBomb) {
-      confettiSettings["props"] = [{ type: "svg", src: "/assets/img/bomb.svg", size: 10 }];
-      confettiSettings.max = 200;
-      confettiSettings.clock = 150;
     }
     this.confetti = new ConfettiGenerator(confettiSettings);
     this.confetti.render();
@@ -803,5 +811,23 @@ export class GlobalVarsService {
           }
         );
     }
+  }
+
+  // Get the highest level parent component that has the app-theme styling.
+  getTargetComponentSelector(): string {
+    return GlobalVarsService.getTargetComponentSelectorFromRouter(this.router);
+  }
+
+  static getTargetComponentSelectorFromRouter(router: Router): string {
+    if (router.url.startsWith("/" + RouteNames.BROWSE)) {
+      return "browse-page";
+    }
+    if (router.url.startsWith("/" + RouteNames.LANDING)) {
+      return "landing-page";
+    }
+    if (router.url.startsWith("/" + RouteNames.INBOX_PREFIX)) {
+      return "messages-page";
+    }
+    return "app-page";
   }
 }

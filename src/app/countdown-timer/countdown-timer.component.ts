@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from "@angular/core";
-import { GlobalVarsService } from "../global-vars.service";
+import { ConfettiSvg, GlobalVarsService } from "../global-vars.service";
 import { Router } from "@angular/router";
 
 @Component({
@@ -8,12 +8,11 @@ import { Router } from "@angular/router";
   styleUrls: ["./countdown-timer.component.scss"],
 })
 export class CountdownTimerComponent implements OnInit {
-  // TODO: Replace with actual date and time this timer should end.
-  @Input() timerEnd: number;
+  @Input() timerEnd: number = Date.now();
   @Input() fontSize: number = 13;
   @Input() borderRadiusSize: number = 0;
   @Input() fontWeight: number = 400;
-  @Input() timerText: string;
+  @Input() timerText: string = "";
   @Input() justifyLeft: boolean = false;
 
   static milliPerSecond: number = 1000;
@@ -28,9 +27,6 @@ export class CountdownTimerComponent implements OnInit {
 
   constructor(public globalVars: GlobalVarsService, private router: Router) {
     const now = new Date().getTime();
-    const pastDeflationBomb = this.globalVars.pastDeflationBomb;
-    this.timerEnd = pastDeflationBomb ? this.globalVars.announcementTimerEnd : this.globalVars.deflationBombTimerEnd;
-    this.timerText = pastDeflationBomb ? this.globalVars.announcementTimerText : this.globalVars.deflationBombTimerText;
     this.setDaysDiff(now);
     this.setHoursDiff(now);
     this.setMinutesDiff(now);
@@ -44,13 +40,7 @@ export class CountdownTimerComponent implements OnInit {
       this.setHoursDiff(now);
       this.setMinutesDiff(now);
       this.setSecondsDiff(now);
-      this.timerEnd = this.globalVars.pastDeflationBomb
-        ? this.globalVars.announcementTimerEnd
-        : this.globalVars.deflationBombTimerEnd;
-      this.timerText = this.globalVars.pastDeflationBomb
-        ? this.globalVars.announcementTimerText
-        : this.globalVars.deflationBombTimerText;
-      this.celebrateIfTimeEnd();
+      this.celebrateIfTimeEnd(now);
     }, 1000);
   }
 
@@ -109,9 +99,10 @@ export class CountdownTimerComponent implements OnInit {
     );
   }
 
-  celebrateIfTimeEnd(): void {
-    if (this.days == "0" && this.hours == "0" && this.minutes == "0" && this.seconds == "0") {
-      this.globalVars.celebrate(false, true);
+  celebrateIfTimeEnd(now: number): void {
+    const diff = (now - this.timerEnd) / 1000;
+    if (diff > 0 && diff < 3) {
+      this.globalVars.celebrate([ConfettiSvg.ROCKET, ConfettiSvg.LAMBO]);
     }
   }
 

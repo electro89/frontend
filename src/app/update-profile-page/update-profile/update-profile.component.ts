@@ -204,6 +204,7 @@ export class UpdateProfileComponent implements OnInit, OnChanges {
         this.globalVars.logEvent("profile : update : error", { parsedError, lowBalance });
         this.updateProfileBeingCalled = false;
         SwalHelper.fire({
+          target: this.globalVars.getTargetComponentSelector(),
           icon: "error",
           title: `An Error Occurred`,
           html: parsedError,
@@ -213,7 +214,7 @@ export class UpdateProfileComponent implements OnInit, OnChanges {
             confirmButton: "btn btn-light",
             cancelButton: "btn btn-light no",
           },
-          confirmButtonText: lowBalance ? "Buy $Bitclout" : null,
+          confirmButtonText: lowBalance ? "Buy $CLOUT" : null,
           cancelButtonText: lowBalance ? "Later" : null,
           showCancelButton: lowBalance,
         }).then((res) => {
