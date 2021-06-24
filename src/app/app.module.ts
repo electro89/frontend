@@ -80,7 +80,7 @@ import { AdminComponent } from "./admin/admin.component";
 import { AdminWyreComponent } from "./admin/admin-wyre/admin-wyre.component";
 import { NetworkInfoComponent } from "./network-info/network-info.component";
 import { SanitizeAndAutoLinkPipe } from "../lib/pipes/sanitize-and-auto-link-pipe";
-import { SanitizeVideoEmbedPipe } from "../lib/pipes/sanitize-video-embed-pipe";
+import { SanitizeEmbedPipe } from "../lib/pipes/sanitize-embed-pipe";
 import { NgxIntlTelInputModule } from "ngx-intl-tel-input";
 import { SettingsComponent } from "./settings/settings.component";
 import { NotificationsListComponent } from "./notifications-page/notifications-list/notifications-list.component";
@@ -116,6 +116,8 @@ import { CountdownTimerComponent } from "./countdown-timer/countdown-timer.compo
 import { AvatarDirective } from "./avatar/avatar.directive";
 import { TrendsPageComponent } from "./trends-page/trends-page.component";
 import { TrendsComponent } from "./trends-page/trends/trends.component";
+import { UploadDirective } from "./directives/upload.directive";
+import { SanitizeQRCodePipe } from "../lib/pipes/sanitize-qrcode-pipe";
 
 // Modular Themes for BitClout by Carsen Klock @carsenk
 import { ThemeModule } from "./theme/theme.module";
@@ -127,6 +129,7 @@ import { legendsTheme } from "./theme/legends-theme";
 @NgModule({
   declarations: [
     AppComponent,
+    UploadDirective,
     TermsOfServiceComponent,
     ManageFollowsComponent,
     ManageFollowsPageComponent,
@@ -195,7 +198,7 @@ import { legendsTheme } from "./theme/legends-theme";
     AdminWyreComponent,
     NetworkInfoComponent,
     SanitizeAndAutoLinkPipe,
-    SanitizeVideoEmbedPipe,
+    SanitizeEmbedPipe,
     SettingsComponent,
     NotificationsListComponent,
     PageComponent,
@@ -221,6 +224,7 @@ import { legendsTheme } from "./theme/legends-theme";
     AvatarDirective,
     TrendsPageComponent,
     TrendsComponent,
+    SanitizeQRCodePipe,
   ],
   imports: [
     BrowserModule,
